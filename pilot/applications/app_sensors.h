@@ -1,0 +1,11 @@
+#ifndef _APP_SENSORS_H_
+#define _APP_SENSORS_H_
+
+#define SENSOR_STATUS_OK			0
+#define SENSOR_STATUS_FAIL			1
+#define SENSOR_STATUS_INIT			2
+#define SENSOR_STATUS_NEED_CALIB	3
+#define SENSOR_STATUS_CALIBING		4
+#define SENSOR_STATUS_UNEQUIPPED    5
+ 
+#endif

@@ -1,0 +1,40 @@
+#ifndef _ROTATION_H_
+#define _ROTATION_H_
+
+#include <stdint.h>
+
+enum Rotation {
+    ROTATION_NONE						= 0,
+    ROTATION_YAW_90						= 1,
+    ROTATION_YAW_180					= 2,
+    ROTATION_YAW_270					= 3,
+    ROTATION_ROLL_180					= 4,
+    ROTATION_ROLL_180_YAW_90			= 5,
+    ROTATION_PITCH_180					= 6,
+    ROTATION_ROLL_180_YAW_270			= 7,
+    ROTATION_ROLL_90					= 8,
+    ROTATION_ROLL_90_YAW_90				= 9,
+    ROTATION_ROLL_270					= 10,
+    ROTATION_ROLL_270_YAW_90			= 11,
+    ROTATION_PITCH_90					= 12,
+    ROTATION_PITCH_270					= 13,
+    ROTATION_PITCH_180_YAW_90			= 14,
+    ROTATION_PITCH_180_YAW_270			= 15,
+    ROTATION_ROLL_90_PITCH_90			= 16,
+    ROTATION_ROLL_180_PITCH_90			= 17,
+    ROTATION_ROLL_270_PITCH_90			= 18,
+    ROTATION_ROLL_90_PITCH_180			= 19,
+    ROTATION_ROLL_270_PITCH_180			= 20,
+    ROTATION_ROLL_90_PITCH_270			= 21,
+    ROTATION_ROLL_180_PITCH_270			= 22,
+    ROTATION_ROLL_270_PITCH_270			= 23,
+    ROTATION_ROLL_90_PITCH_180_YAW_90	= 24,
+    ROTATION_ROLL_90_YAW_270			= 25,
+    ROTATION_YAW_135					= 26,
+};
+
+void rotate3(float val[3],uint8_t rotation);
+void rotate2(float val[2],uint8_t rotation);
+
+#endif
+
