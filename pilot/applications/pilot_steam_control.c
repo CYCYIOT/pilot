@@ -54,7 +54,7 @@
 #define down 2
 
 int server_sock;
-int flag_ac=0;
+
 struct data_control
 {
   int id;
@@ -157,7 +157,7 @@ void steam_control_alt(int alt)
   if(alt < 0)
   	{
   	// tof("join down alt = %d\n",alt);
-     thr=-0.590;
+     thr=-0.50;
 	 while((bf=baro_get_alt_raw()) - baro_alt_s > (float)alt/100)
 	 	{
 	 	//tof("bf:%3.3f baro_alt_s:%3.3f\n",bf,baro_alt_s);
@@ -167,7 +167,7 @@ void steam_control_alt(int alt)
   else
   	{
   //	tof("join up alt = %d\n",alt);
-     thr=0.590;	
+     thr=0.50;	
      while((bf=baro_get_alt_raw()) - baro_alt_s < (float)alt/100)
       { 
       //tof("bf:%3.3f baro_alt_s:%3.3f\n",bf,baro_alt_s);
@@ -214,6 +214,7 @@ loop:
 
 	thr=0;
 	rc_awlink_set_rc(roll,pitch,yaw,thr);
+	//debug_t("alt_end = %d tof_alt = %f\n",alt,get_tof_data_yaw());
 	pilot_send_to_img(0);
 
 }
@@ -228,56 +229,20 @@ void steam_control_tof_althold_udp(int alt)
 
   tof_alt_s=get_tof_data_yaw();
   //printf("alt = %d\n",alt);
-
-   if(flag_ac == 0)
-   	{
-   if(((float)alt/100) - tof_alt_s  > 0.05)
-    {    
-         flag_ac=up;
-         thr=0.590;
-         rc_awlink_set_rc(roll,pitch,yaw,thr);
-		     
+   
+ if( fabs(((float)alt/100) - tof_alt_s) > 0.05){
+   if(((float)alt/100) - tof_alt_s  > 0){       
+         thr=0.50;             
      }
-   else
-   {
-         flag_ac=down;
-         thr= -0.590;
-         rc_awlink_set_rc(roll,pitch,yaw,thr);
+   else{
+        thr= -0.50;
      }
-   	}
-   else
-   	{
-     if(flag_ac==up)
-     {
-       if(fabs(((float)alt/100) - tof_alt_s ) >0.05)
-       {    
-         thr=0.590;
-         rc_awlink_set_rc(roll,pitch,yaw,thr);
-		     
-       }
-	   else
-	   	{
-	   	flag_ac=0;
-		set_tof_althold(0);
-	   	  }
-       }
-	 else
-	 {
-       if(fabs(((float)alt/100) - tof_alt_s)  > 0.05)
-       {    
-         thr=-0.590;
-         rc_awlink_set_rc(roll,pitch,yaw,thr);
-		     
-       }
-	   else
-	   	{
-	   	flag_ac=0;
-		set_tof_althold(0);
-	   	  }
-	 
-	 	}
-       }
-	
+    rc_awlink_set_rc(roll,pitch,yaw,thr);
+ }
+ else{
+     set_tof_althold(0);
+	 rc_awlink_set_rc(0,0,0,0);
+   }
 }
 void control_action(struct data_control *buff)
 {
