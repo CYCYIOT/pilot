@@ -19,7 +19,7 @@
 #include "hal_aruco_linux.h"
 #include "hal.h"
 #include "hal_tof_vl53l1x.h"
-
+#include "hal_arduino.h"
 #define DEBUG_ID DEBUG_ID_HAL
 
 typedef struct {
@@ -182,7 +182,7 @@ int pthread_create_aruco_action(){
 	pthread_attr_init(&attr); 
 	int ret; 
 	pthread_attr_setdetachstate(&attr,PTHREAD_CREATE_DETACHED); 
-	ret=pthread_create(&heart,&attr,aruco_action_thread,NULL);
+	ret=pthread_create(&heart,&attr,arduino_thread,NULL);
 	if(ret < 0) {  
 		printf("pthread_create fail\n");  
 		return -1;

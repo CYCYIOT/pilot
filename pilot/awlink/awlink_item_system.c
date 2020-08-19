@@ -50,6 +50,24 @@ void awlink_encode_system_msg(awlink_s * link,uint8_t level,uint8_t * buf)
 	awlink_encode(link,&msg,false,false);
 }
 
+void awlink_encode_system_shooting(awlink_s * link,uint8_t ack,uint8_t i_id,uint8_t si_id)
+{
+    awlink_msg_s msg;
+	awlink_system_ack_s data;
+
+	data.ack = ack;
+	data.item_id = i_id;
+	data.subitem_id = si_id;
+
+	msg.item_id = AWLINK_ITEM_STATUS;
+	msg.subitem_id = AWLINK_ITEM_STATUS_BEHIT_OK;
+	msg.data = (uint8_t *)&data;
+	msg.length = sizeof(data);
+
+	awlink_encode(link,&msg,false,true);
+
+}
+
 void awlink_encode_system_aruco_ack(awlink_s * link,uint8_t ack,uint8_t i_id,uint8_t si_id)
 {
     awlink_msg_s msg;
@@ -142,7 +160,7 @@ void awlink_decode_system_heart(awlink_s * link,awlink_msg_s * msg_rev)
 {
 	//awlink_system_heart_s * data;
 	//data = (awlink_system_heart_s *)msg_rev->data;
-	
+	//printf("heart\n");
 	system_set_awlink_heart_count();
 }
 

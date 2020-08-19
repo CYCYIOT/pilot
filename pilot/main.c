@@ -121,9 +121,9 @@ int pilot_thread_main(void* paramter)
 			attitude_update(dt);
 			nav_update(dt);
             pilot_recv_from_udp_update(dt);
-#ifdef X_1
+
 	        arduino_update(dt);
-#endif
+
 			//rc and awlink update
 			rc_update(dt);
 			awlink_update(dt);

@@ -100,11 +100,8 @@ int hal_init(void)
     aruco_used=aruco_linux_open();
 	//BATT
 	batt_linux_used = batt_linux_open();
-
-#ifdef X_1
     //arduino
     arduino_used = arduino_open();
-#endif	
 	//CPU & MEMORY
 	cpu_linux_used = hal_linux_cpu_open();
 	mem_linux_used = hal_linux_mem_open();

@@ -104,6 +104,11 @@ void awlink_aruco_send()
 
 
 }
+void awlink_shooting_send_tcp()
+{
+ awlink_encode_system_shooting(&awlink_main,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,AWLINK_ITEM_CONTROL_SHOOTING);
+
+}
 void recv_uart(uint8_t *recv_buf,int len)
 {
   awlink_network_s * net = &awlink_main.net;

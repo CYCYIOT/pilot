@@ -20,6 +20,7 @@
 #include "awlink_item_system.h"
 #include "pilot_steam_control.h"
 #include "app_control_takeoff.h"
+#include "hal_arduino.h"
 
 #define DEBUG_ID DEBUG_ID_LINK
 
@@ -85,6 +86,10 @@ typedef struct PACKED{
 typedef struct PACKED{
 	uint8_t alt;
 }awlink_control_takeoff_alt_s;
+typedef struct PACKED{
+	uint8_t shooting_id;
+}awlink_control_shooting_id;
+
 typedef struct PACKED{
     uint8_t action;
 	uint8_t id;
@@ -229,8 +234,8 @@ void awlink_decode_control_mode(awlink_s * link,awlink_msg_s * msg_rev)
 	awlink_control_mode_s * data;
 	data = (awlink_control_mode_s *)msg_rev->data;	
 
-  //  if(data->mode == 8)   //²âÊÔ ·­×ª»»³ÉÅ×·É
-	//   data->mode=12;
+ //  if(data->mode == 8)   //²âÊÔ ·­×ª»»³ÉÅ×·É
+   
     control_set_mode(data->mode,data->param1,data->param2);
 	if(data->mode == 8)
 	  file_flag=true;
@@ -280,6 +285,21 @@ void awlink_decode_control_aruco_dist(awlink_s *link,awlink_msg_s *msg_rev)
   set_power((float)data->roll,(float)data->pitch,(float)data->yaw,data->id,data->action);
 
 }
+void awlink_decode_control_shooting(awlink_s *link,awlink_msg_s *msg_rev)
+{
+  awlink_control_shooting_id *data;
+  data=(awlink_control_shooting_id*)msg_rev->data;
+  printf("id = %d\n",data->shooting_id);
+  uart_shooting(data->shooting_id);  
+
+}
+void awlink_decode_control_con_shooting_id(awlink_s *link,awlink_msg_s *msg_rev)
+{ 
+  awlink_control_shooting_id *data;
+  data=(awlink_control_shooting_id*)msg_rev->data;
+  set_marking(data->shooting_id);
+  printf("set_id = %d\n",data->shooting_id);
+}
 
 void awlink_handle_control(awlink_s * link,awlink_msg_s * msg)
 {
@@ -323,7 +343,13 @@ void awlink_handle_control(awlink_s * link,awlink_msg_s * msg)
 		case AWLINK_ITEM_CONTROL_ARUCO_DIST:
 			awlink_encode_system_ack(link,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,msg->subitem_id);
 			awlink_decode_control_aruco_dist(link,msg);
-			break;			
+			break;	
+		case AWLINK_ITEM_CONTROL_SHOOTING:
+			awlink_decode_control_shooting(link,msg);
+			break;
+		case AWLINK_ITEM_CONTROL_CON_SH_id:
+			awlink_decode_control_con_shooting_id(link,msg);
+			break;
 	}
 }
 

@@ -15,16 +15,19 @@
 #include "lib_math.h"
 #include "app_debug.h"
 #include "app_rc.h"
+#include "app_awlink.h"
+
 #define DEBUG_ID DEBUG_ID_HAL
 
 #define UART_ARDUINO  "/dev/ttyS2"
 
 static int arduino_fd=-1;
 
+static uint8_t marking = 0xdd; 
 bool arduino_open()
 {
-
-	arduino_fd = open(UART_ARDUINO, O_RDWR | O_NONBLOCK | O_NDELAY | O_NOCTTY);   //打开串口文件
+ 
+	arduino_fd = open(UART_ARDUINO, O_RDWR | O_NONBLOCK| O_NDELAY | O_NOCTTY );   //打开串口文件
 
 	if(arduino_fd < 0){
 		DEBUG(DEBUG_ID,"arduino init failed");
@@ -54,21 +57,31 @@ bool arduino_read()
 
 	return false;
 }
-
-
-
-
-bool arduino_write(uint8_t * w_buf,int len)
+int arduino_write(uint8_t * w_buf,int len)
 {
   int num;
   num = write(arduino_fd,w_buf,len);
   if(num == len){
-	printf("write ok num = %d\n",num);
-   return true;
+	//printf("write ok num = %d\n",num);
+   return num;
   }
- return false;
+ return -1;
 }
 
+int uart_shooting(uint8_t id)
+{
+   int ret=0;
+   uint8_t buf[] ={0x3f,0x04,0x00,0x00,0x00,0x01};    // 测试红外通信
+   buf[5]=id;		
+   ret = arduino_write(buf,6);
+   if(ret != 6){
+    arduino_write(buf,6);
+   }
+  return 0;
+}
+
+
+#if 1
 static void crc_check(uint8_t *data,int len)
 {
 	int i=0;
@@ -86,33 +99,46 @@ static void crc_check(uint8_t *data,int len)
 #endif	
 	recv_uart(data,len);
 } 
+#endif
 
-int count_a =0;
-
+void set_marking(uint8_t mark_shoot)
+{
+  marking=mark_shoot;
+}
+void Parsing_returned_data(uint8_t id)
+{
+   if(id == marking){
+    awlink_shooting_send_tcp();
+	printf("被击中\n");
+   }
+}
 void arduino_update(float dt)
 {
 
     int num;
 	uint8_t i;
 	uint8_t rx_buf[100];
- #if 0   
-	uint8_t buf[] ={0x3f,0x04,0x00,0xff,0x22,0xdd};    // 测试红外通信
+#if 0  
+	uint8_t buf[] ={0x3f,0x04,0x00,0x00,0x00,0x01};    // 测试红外通信
     if(count_a ++ >1000){
 	arduino_write(buf,6);
     count_a=0;
 	}
 #endif
+
+#ifdef X_1
 	rc_awlink_set_rc_h();                      //主动刷新心跳，无断线自动降落功能
-  
+#endif  
+
 	num = read(arduino_fd,rx_buf,100);
 	if(num > 0){
 		for(i = 0;i < num;i++){
 			printf("rx_buf[%d] = %d %x \n",i,rx_buf[i],rx_buf[i]);
 		}
-
-	   if(arduino_control(rx_buf[0]) == true ){     //先判断是不是自定义私有协议
-         return ;
-	   }
+       Parsing_returned_data(rx_buf[3]);
+//	   if(arduino_control(rx_buf[0]) == true ){     //先判断是不是自定义私有协议
+ //        return ;
+//	   }
 
 	   if(rx_buf[0] == AWLINK_MAGIC){
 		 crc_check(rx_buf,num);
@@ -121,9 +147,32 @@ void arduino_update(float dt)
 		 crc_check(&rx_buf[8],num-8);          //串口数据会多发8位，当接受的第一位数据不是0xFA时，需要后移8位才是需要的数据
 	    }
 	}
-  
+
 }
 
+void* arduino_thread(void *arg)
+{
+  int num;
+  uint8_t i;
+  uint8_t rx_buf[100];
+  while(1){
+
+   num = read(arduino_fd,rx_buf,100);
+   if(num > 0){
+	for(i = 0;i < num;i++){
+		printf("rx_buf[%d] = %d %x \n",i,rx_buf[i],rx_buf[i]);
+		}
+	}else{
+     // printf("no data\n");
+	}
+
+  }
+
+  usleep(2000);
+
+ return ((void * )0);
+
+}
 
 
 

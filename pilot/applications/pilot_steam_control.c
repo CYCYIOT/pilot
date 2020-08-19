@@ -30,6 +30,7 @@
 #include "app_control_takeoff.h"
 #include "awlink_item_control.h"
 #include "hal_infra_red.h"
+#include "hal.h"
 #define    tof(str, arg...)  do{\
            time_t timep;\
            struct tm *p;\
@@ -181,41 +182,37 @@ void steam_control_alt(int alt)
 	
  return ;
 }
-
 void steam_control_tof_althold(int alt)
 {
 
-  float tof_alt_s;
+//  float tof_alt_s;
   float roll,pitch,yaw,thr;
   float bf;
+  int count=0;
   roll=0;
   pitch=0;
   yaw=0;
 
-  tof_alt_s=hal_get_tof_data();
- // printf("alt = %d\n",alt);
-   if( ((float)alt/100) - tof_alt_s  > 0)
-    {    
-        
-         thr=0.590;
-         while(fabs(((float)alt/100) - (bf=hal_get_tof_data())) > 0.05)
-         	{
-         	   //  printf("up vel = %f tof = %f\n",((float)alt/100)-bf,bf);
-                 rc_awlink_set_rc(roll,pitch,yaw,thr);
-		       }
-     }
-   else
-   {
-        
-         thr= -0.590;
-         while(fabs(((float)alt/100) - (bf=hal_get_tof_data())) > 0.05)
-         	{
-         	   //   printf(" down vel = %f tof = %f\n",((float)alt/100)-bf,bf);
-                 rc_awlink_set_rc(roll,pitch,yaw,thr);
-		       }
+ // tof_alt_s=get_tof_data_yaw();
+ // debug_t("alt_start = %d tof_alt = %f\n",alt,tof_alt_s);
+loop:
+  while(fabs(((float)alt/100) - (bf=get_tof_data_yaw())) > 0.05){
+  //	count =0;
+	if( ((float)alt/100) - bf  > 0){	 
+		 thr=0.50;
+    }else{			  
+	     thr=-0.50;
+	}
+	 rc_awlink_set_rc(roll,pitch,yaw,thr); 
+	 usleep(1000);
+		 
+  }
+ 
+  if(count++ > 3){
+    goto loop;
+  }
 
-    }
-    thr=0;
+	thr=0;
 	rc_awlink_set_rc(roll,pitch,yaw,thr);
 	pilot_send_to_img(0);
 
@@ -229,7 +226,7 @@ void steam_control_tof_althold_udp(int alt)
   pitch=0;
   yaw=0;
 
-  tof_alt_s=hal_get_tof_data();
+  tof_alt_s=get_tof_data_yaw();
   //printf("alt = %d\n",alt);
 
    if(flag_ac == 0)

@@ -7,9 +7,12 @@
 
 
 bool arduino_open();
-bool arduino_write(uint8_t * w_buf,int len);
+int arduino_write(uint8_t * w_buf,int len);
 
 void arduino_update(float dt);
+void* arduino_thread(void *arg);
+int uart_shooting(uint8_t id);
+void set_marking(uint8_t mark_shoot);
 
 
 #endif
