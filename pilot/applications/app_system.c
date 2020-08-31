@@ -158,7 +158,7 @@ void system_update(float dt)
 	awlink_heart_send_time += dt;
 
 	if(awlink_heart_send_time >= (1.0f / SYSTEM_AWLINK_HEART_HZ)){
-		awlink_heart();
+		awlink_heart();           //AflingÒ£¿Ø²»ÄÜÊ¹ÓÃ
 		awlink_heart_send_time = 0.0f;
 	}
 

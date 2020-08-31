@@ -64,7 +64,7 @@ void awlink_encode_system_shooting(awlink_s * link,uint8_t ack,uint8_t i_id,uint
 	msg.data = (uint8_t *)&data;
 	msg.length = sizeof(data);
 
-	awlink_encode(link,&msg,false,true);
+	awlink_encode(link,&msg,false,false);
 
 }
 

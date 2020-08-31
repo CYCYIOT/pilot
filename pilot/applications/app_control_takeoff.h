@@ -13,6 +13,8 @@ bool get_takeoff_flag();
 void set_takeoff_flag_alt();
 void set_takeoff_flag_poshold();
 bool get_takeoff_flag_poshold();
+bool get_takeoff_flag_posalt();
+void set_takeoff_flag_posalt();
 
 
 #endif

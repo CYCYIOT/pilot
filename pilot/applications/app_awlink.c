@@ -14,7 +14,7 @@ awlink_s awlink_sub;
 
 void awlink_msg(uint8_t level,uint8_t * buf)
 {
-	awlink_encode_system_msg(&awlink_main,level,buf);
+	awlink_encode_system_msg(&awlink_main,level,buf);  //¨¨o??2a¨º?
 #ifdef AWLINK_SUB_LINK
 	awlink_encode_system_msg(&awlink_sub,level,buf);
 #endif

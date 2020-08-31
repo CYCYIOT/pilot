@@ -375,9 +375,10 @@ void control_poshold_update(float dt,rc_s * rc)
 		control_alt_common_rc(dt,rc);
 	}
 
-    if(control_get_mode_last() == CONTROL_MODE_TAKEOFF && get_takeoff_flag_poshold()== true){      //起飞完成后定高一次
+    if(control_get_mode_last() == CONTROL_MODE_TAKEOFF && get_takeoff_flag_posalt()== true){      //起飞完成后定高一次
      if(count_tf++ > 1000){
 	 set_tof_althold(100); 
+     set_takeoff_flag_posalt();
 	 pt_flag=true;
 	 count_tf=0;
      }

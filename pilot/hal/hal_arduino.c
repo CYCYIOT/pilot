@@ -23,7 +23,7 @@
 
 static int arduino_fd=-1;
 
-static uint8_t marking = 0xdd; 
+static uint8_t marking = 2; 
 bool arduino_open()
 {
  
@@ -71,7 +71,7 @@ int arduino_write(uint8_t * w_buf,int len)
 int uart_shooting(uint8_t id)
 {
    int ret=0;
-   uint8_t buf[] ={0x3f,0x04,0x00,0x00,0x00,0x01};    // 测试红外通信
+   uint8_t buf[] ={0x3f,0x04,0x0d,0x00,0x00,0x01};    // 红外通信协议，后四位可以自定，
    buf[5]=id;		
    ret = arduino_write(buf,6);
    if(ret != 6){
@@ -80,8 +80,6 @@ int uart_shooting(uint8_t id)
   return 0;
 }
 
-
-#if 1
 static void crc_check(uint8_t *data,int len)
 {
 	int i=0;
@@ -91,25 +89,19 @@ static void crc_check(uint8_t *data,int len)
 	}
 	data[len-2]=checksum&0xff;
 	data[len-1]=(checksum>>8)&0xff;
-#if 0
-    printf("=======================================\n");
-	for(i = 0;i < len;i++){
-			printf("rx_buf[%d] = %d %x \n",i,data[i],data[i]);
-		}
-#endif	
+	
 	recv_uart(data,len);
 } 
-#endif
 
 void set_marking(uint8_t mark_shoot)
 {
   marking=mark_shoot;
 }
-void Parsing_returned_data(uint8_t id)
+void Parsing_returned_data(uint8_t ta, uint8_t id)
 {
-   if(id == marking){
-    awlink_shooting_send_tcp();
-	printf("被击中\n");
+   if(id == marking && ta == 0x0d){
+    awlink_shooting_send_tcp();   // 目前为udp
+	printf("be hit\n");
    }
 }
 void arduino_update(float dt)
@@ -118,13 +110,6 @@ void arduino_update(float dt)
     int num;
 	uint8_t i;
 	uint8_t rx_buf[100];
-#if 0  
-	uint8_t buf[] ={0x3f,0x04,0x00,0x00,0x00,0x01};    // 测试红外通信
-    if(count_a ++ >1000){
-	arduino_write(buf,6);
-    count_a=0;
-	}
-#endif
 
 #ifdef X_1
 	rc_awlink_set_rc_h();                      //主动刷新心跳，无断线自动降落功能
@@ -135,15 +120,16 @@ void arduino_update(float dt)
 		for(i = 0;i < num;i++){
 			printf("rx_buf[%d] = %d %x \n",i,rx_buf[i],rx_buf[i]);
 		}
-       Parsing_returned_data(rx_buf[3]);
-//	   if(arduino_control(rx_buf[0]) == true ){     //先判断是不是自定义私有协议
- //        return ;
-//	   }
-
+       Parsing_returned_data(rx_buf[0],rx_buf[3]);
+#if 0
+	   if(arduino_control(rx_buf[0]) == true ){     //先判断是不是自定义私有协议
+         return ;
+	   }
+#endif
 	   if(rx_buf[0] == AWLINK_MAGIC){
 		 crc_check(rx_buf,num);
 		 }else{
-         DEBUG(DEBUG_ID,"uart send error\n");
+        // DEBUG(DEBUG_ID,"uart send error\n");
 		 crc_check(&rx_buf[8],num-8);          //串口数据会多发8位，当接受的第一位数据不是0xFA时，需要后移8位才是需要的数据
 	    }
 	}

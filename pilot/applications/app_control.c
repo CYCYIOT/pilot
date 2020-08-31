@@ -135,6 +135,11 @@ bool control_mode_check(uint8_t mode)
 
 bool control_set_mode(uint8_t new_mode,float param1,float param2)
 {
+
+ if(control_mode == CONTROL_MODE_POSHOLD && new_mode == CONTROL_MODE_TAKEOFF){
+   return false;
+ }
+
 	if(control_mode != new_mode){
 
 		if(control_mode_check(new_mode) == false){

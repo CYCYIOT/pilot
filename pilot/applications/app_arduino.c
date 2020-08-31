@@ -35,7 +35,7 @@ bool arduino_control(uint8_t id)
 	ret = true;
 	break;
    case ARDUINO_LED_STOP:
-   	pilot_send_to_img(1);
+   //	pilot_send_to_img(1);
    	ret=true;
 	break;
   }

@@ -21,7 +21,7 @@
 #include "pilot_steam_control.h"
 #include "app_control_takeoff.h"
 #include "hal_arduino.h"
-
+#include "hal_led.h"
 #define DEBUG_ID DEBUG_ID_LINK
 
 #define RANGE 1000.0;
@@ -300,6 +300,17 @@ void awlink_decode_control_con_shooting_id(awlink_s *link,awlink_msg_s *msg_rev)
   set_marking(data->shooting_id);
   printf("set_id = %d\n",data->shooting_id);
 }
+void awlink_decode_control_led_blink(awlink_s *link,awlink_msg_s *msg_rev)
+{
+
+  awlink_control_shooting_id *data;
+  data=(awlink_control_shooting_id*)msg_rev->data;
+  if(data->shooting_id == 0){
+   led_blink(0xff);
+  }else{
+   led_blink(1);
+  }
+}
 
 void awlink_handle_control(awlink_s * link,awlink_msg_s * msg)
 {
@@ -335,6 +346,7 @@ void awlink_handle_control(awlink_s * link,awlink_msg_s * msg)
 			awlink_decode_control_mission(link,msg);
 			break;
 		case AWLINK_ITEM_CONTROL_TOF_ALTHOLD:
+			awlink_encode_system_ack(link,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,msg->subitem_id);
             awlink_decode_control_tof_althold(link,msg);
 			break;
 		case AWLINK_ITEM_CONTROL_TAKEOFF_ALT:
@@ -345,10 +357,16 @@ void awlink_handle_control(awlink_s * link,awlink_msg_s * msg)
 			awlink_decode_control_aruco_dist(link,msg);
 			break;	
 		case AWLINK_ITEM_CONTROL_SHOOTING:
+			awlink_encode_system_ack(link,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,msg->subitem_id);
 			awlink_decode_control_shooting(link,msg);
 			break;
 		case AWLINK_ITEM_CONTROL_CON_SH_id:
+			awlink_encode_system_ack(link,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,msg->subitem_id);
 			awlink_decode_control_con_shooting_id(link,msg);
+			break;
+		case AWLINK_ITEM_CONTROL_LED_SWITCH:
+			awlink_encode_system_ack(link,AWLINK_ACK_OK,AWLINK_ITEM_CONTROL,msg->subitem_id);
+			awlink_decode_control_led_blink(link,msg);
 			break;
 	}
 }

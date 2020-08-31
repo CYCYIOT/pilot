@@ -40,6 +40,7 @@ static uint8_t takeoff_step;
 static float tkof_pos_sp[3] = {0.0f};
 bool takeoff_flag_alt=false;
 bool takeoff_flag_pos=false;
+bool takeoff_flag_pos_alt=false;
 
 bool control_takeoff_check()
 {
@@ -116,6 +117,14 @@ bool get_takeoff_flag_poshold()
 	return takeoff_flag_pos;
 }
 
+bool get_takeoff_flag_posalt()
+{
+	return takeoff_flag_pos_alt;
+}
+void set_takeoff_flag_posalt()
+{
+	takeoff_flag_pos_alt=false;
+}
 void control_takeoff_update(float dt,rc_s * rc)
 {
 	float vel_sp[3] = {0};
@@ -124,7 +133,8 @@ void control_takeoff_update(float dt,rc_s * rc)
 	uint8_t count = 0;
 	//float alt_z=0;
 	takeoff_flag_alt=true;
-	takeoff_flag_pos=true;
+    takeoff_flag_pos=true;            // ???¡§?e¡¤¨¦?¡ê¨º?¨º?¡¤?¨º¦Ì¨º¡À?¨¹D??¡ê¨º?¡Á¡ä¨¬?(¡À?D?o¨ª?¡§???¨¹¨¢?flag¡À¡ê3?¨°???)
+	takeoff_flag_pos_alt=true;       //???¡§?e¡¤¨¦¨º?¡¤?D¨¨¨°a?¡äDD?¡§???¨¹¨¢?
 	nav_get_pos(&pos);
 	attitude_get(&att);
 

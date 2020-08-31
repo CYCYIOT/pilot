@@ -6,6 +6,7 @@
 #include "awlink_item_status.h"
 #include "awlink_item_control.h"
 #include "pilot_steam_control.h"
+#include "hal_led.h"
 #define DEBUG_ID DEBUG_ID_NETWORK
 #define LED_BLINK_STOP  1
 bool awlink_network_get_connect(awlink_network_s * net)
@@ -26,7 +27,7 @@ void awlink_socket_recv_udp(awlink_s * link)
 			char addr_p[INET_ADDRSTRLEN];
 			inet_ntop(AF_INET,&net->udp_addr_send.sin_addr,addr_p,sizeof(addr_p));
 			INFO(DEBUG_ID,"UDP connect:%d(%s)",ntohs(net->udp_addr_send.sin_port),addr_p);
-            pilot_send_to_img(LED_BLINK_STOP);
+            led_blink(LED_BLINK_STOP);
 		}
 		
 		awlink_decode(link,&net->udp_decoder,net->udp_recv_buf,len);

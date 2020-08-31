@@ -28,6 +28,7 @@
 #include "hal_infra_red.h"
 #include "hal_aruco_linux.h"
 #include "hal_arduino.h"
+#include "hal_led.h"
 #define DEBUG_ID DEBUG_ID_HAL
 
 bool spl06_used			= false;

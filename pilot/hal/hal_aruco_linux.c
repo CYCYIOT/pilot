@@ -105,7 +105,7 @@ float get_aruco_yaw_p()
 #define Power 100
 #define Power_zero 0
 #define COUNTNUM 10
-#define TIME_OUT 100
+#define TIME_OUT 60  //6
 
 void set_count_zero()
 {
@@ -294,7 +294,7 @@ void process_around(float around_id)
 void process_action_def(float target_id)
 {
    if(aruco_id == target_id){              //判断是否是目标二维码
-	 if(cent_count++ > 5){               // 计数超过 5 次，结束动作
+	 if(cent_count++ > 2){               // 计数超过 5 次，结束动作
 	  flag_aruco=0;                      //判断标志归零
 	  cent_count=0;                      //中心计数清零
       count2=count3=count4=count5=0;
