@@ -23,7 +23,7 @@
 
 static int arduino_fd=-1;
 
-static uint8_t marking = 2; 
+static uint8_t marking = 100; 
 bool arduino_open()
 {
  

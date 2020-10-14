@@ -37,6 +37,13 @@
 #define ARMED_RATE4     0.17
 #define BAT_HIGH_D      3000
 #define VOL_VIR         3500
+#elif S                               //s500
+#define ARMED_RATE1     0.095 
+#define ARMED_RATE2     0.095 
+#define ARMED_RATE3     0.095 
+#define ARMED_RATE4     0.095
+#define BAT_HIGH_D      3000
+#define VOL_VIR         3500
 #else                                    //思创无人机
 #define ARMED_RATE1     0.3             //(30s %10)
 #define ARMED_RATE2     0.3   

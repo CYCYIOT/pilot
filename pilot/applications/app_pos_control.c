@@ -135,7 +135,13 @@ void pos_control_set_vel_pid_break_high_speed_mode()
 		pid_p_tmp[0] = pid_vel_xy_p;
 	}else if(fabs(vel_pid[0].error_now) < 1.0f){
 		pid_i_tmp[0] = pid_vel_break_xy_i;
-		pid_p_tmp[0] = pid_vel_break_xy_p * 0.8f;
+#ifdef M
+       pid_p_tmp[0] = pid_vel_break_xy_p * 0.5f; 
+#elif  K		
+       pid_p_tmp[0] = pid_vel_break_xy_p * 0.5f;
+#else
+       pid_p_tmp[0] = pid_vel_break_xy_p * 0.8f;
+#endif
 	}else{
 		pid_i_tmp[0] = 0.0f;
 		pid_p_tmp[0] = pid_vel_break_xy_p;
@@ -146,7 +152,14 @@ void pos_control_set_vel_pid_break_high_speed_mode()
 		pid_p_tmp[1] = pid_vel_xy_p;
 	}else if(fabs(vel_pid[1].error_now) < 1.0f){
 		pid_i_tmp[1] = pid_vel_break_xy_i;
-		pid_p_tmp[1] = pid_vel_break_xy_p * 0.8f;
+#ifdef M		
+		pid_p_tmp[1] = pid_vel_break_xy_p * 0.5f;
+#elif  K	
+		pid_p_tmp[1] = pid_vel_break_xy_p * 0.5f;
+#else
+        pid_p_tmp[1] = pid_vel_break_xy_p * 0.8f;
+#endif
+
 	}else{
 		pid_i_tmp[1] = 0.0f;
 		pid_p_tmp[1] = pid_vel_break_xy_p;

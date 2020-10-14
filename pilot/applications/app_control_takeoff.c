@@ -57,6 +57,7 @@ bool control_takeoff_check()
 
 void control_takeoff_param_init()
 {
+    param_set_var(CON__TAKEOFF__SPIN__TIMEOUT_NAME ,&takeoff_spin_timeout);
 	param_set_var(CON__TAKEOFF__SPIN_NAME		,&takeoff_spin);
 	param_set_var(CON__TAKEOFF__ALT_NAME		,&takeoff_alt);
 	param_set_var(CON__TAKEOFF__VEL_LIMIT_NAME	,&takeoff_vel_limit);

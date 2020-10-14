@@ -21,7 +21,7 @@
 #define FS_TIME_OUT              5000
 
 #ifdef M                             //减速组
-#define MOTOR_LOCKED             7
+#define MOTOR_LOCKED             8
 #define COLLISION_VAL            6
 #define LOCKED_ON                1
 #else                               //其他

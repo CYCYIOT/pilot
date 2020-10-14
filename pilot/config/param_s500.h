@@ -1,8 +1,8 @@
-#ifndef _PARAM_m_H_
-#define _PARAM_m_H_
+#ifndef _PARAM_s_H_
+#define _PARAM_s_H_
 
 
-#define MODEL_UAV  'M'
+#define MODEL_UAV  'S'
 
 
 #define IMU__ROTATION_DEF	6.0f
@@ -110,9 +110,9 @@
 #define CON__COMM__VEL_Z_GAIN_DEF				0.5f
 #define CON__COMM__RF_GAIN_DEF					1.0f
 #define CON__COMM__RF_VEL_CHECK_DEF				1.2f
-
-#define CON__TAKEOFF__SPIN_TIMEOUT              1.0f
-#define CON__TAKEOFF__SPIN_DEF					0.05f
+ 
+#define CON__TAKEOFF__SPIN_TIMEOUT              3.0f
+#define CON__TAKEOFF__SPIN_DEF					0.15f
 #define CON__TAKEOFF__ALT_DEF					1.0f
 #define CON__TAKEOFF__VEL_LIMIT_DEF				0.2f  //0.5f
 #define CON__TAKEOFF__RC_CHECK_DEF				0.3f
@@ -145,8 +145,8 @@
 #define ATT__RATE_RP_LOW_FILTER_DEF				50.0f
 #define ATT__RATE_YAW_LOW_FILTER_DEF			30.0f
 
-#define PID__ATT__ROLL_P_DEF 					0.10f//0.15f
-#define PID__ATT__PITCH_P_DEF					0.10f//0.15f
+#define PID__ATT__ROLL_P_DEF 					0.13f
+#define PID__ATT__PITCH_P_DEF					0.13f
 #define PID__ATT__YAW_P_DEF 					0.04f
 
 #define PID__RATE__ROLL_P_DEF					0.10f
@@ -192,7 +192,7 @@
 #define PID__VEL__X_I_INIT_DEF				0.0f
 #define PID__VEL__Y_I_INIT_DEF				0.0f
 
-#define PID__VEL__BREAK_XY_P_DEF			1.0f//0.13f
+#define PID__VEL__BREAK_XY_P_DEF			0.15f
 #define PID__VEL__BREAK_XY_I_DEF			0.08f
 
 #define PID__VEL__Z_P_DEF         			0.3f

@@ -160,9 +160,9 @@ void awlink_decode_control_joystick(awlink_s * link,awlink_msg_s * msg_rev)
 	awlink_control_joystick_s * data;
 	
 	data = (awlink_control_joystick_s *)msg_rev->data;
-	//if( data->roll != 0 || data->pitch != 0 ){
+	
    // printf("roll=%d pitch=%d yaw=%d thr=%d\n",data->roll,data->pitch,data->yaw,data->throttle);
-	//	}
+	
 	if(link->control_enable == true){
          if(data->roll == 0 && data->pitch ==0 && data->yaw == 0 && data->throttle == 0){
 		    roll = get_aruco_x_p()/ RANGE;
@@ -177,19 +177,9 @@ void awlink_decode_control_joystick(awlink_s * link,awlink_msg_s * msg_rev)
 			thr = (float)data->throttle/ RANGE;
 			}
 		
-		if( roll != 0 || pitch != 0 || yaw !=0){
-		 tof_flag=1;
+		
 		 rc_awlink_set_rc(roll,pitch,yaw,thr);
-		 
-			}
-        else{
-         tof_flag=0;
-		 rc_awlink_set_rc(roll,pitch,yaw,thr);
-
 		}
-	}
-
-
 #endif
 }
 
@@ -200,9 +190,8 @@ void awlink_decode_control_status_rate(awlink_s * link,awlink_msg_s * msg_rev)
 
 	//printf("type = %d rate = %d \n",data->type,data->rate);
 	awlink_stream_set_rate(link,data->type,data->rate);
-	//awlink_stream_set_rate(link,6,25); //²âÊÔ
+	//awlink_stream_set_rate(link,6,25); //???}
 }
-
 void awlink_decode_control_calibrate(awlink_s * link,awlink_msg_s * msg_rev)
 {
 	awlink_control_calibrate_s * data;
@@ -233,11 +222,17 @@ void awlink_decode_control_mode(awlink_s * link,awlink_msg_s * msg_rev)
 {
 	awlink_control_mode_s * data;
 	data = (awlink_control_mode_s *)msg_rev->data;	
-
- //  if(data->mode == 8)   //²âÊÔ ·­×ª»»³ÉÅ×·É
-   
-    control_set_mode(data->mode,data->param1,data->param2);
-	if(data->mode == 8)
+    
+   if(data->mode == CONTROL_MODE_FLIP){  
+#ifdef S
+     return ;
+#elif X
+      return ;
+#else
+#endif
+   	}
+  control_set_mode(data->mode,data->param1,data->param2);
+	if(data->mode == CONTROL_MODE_FLIP)
 	  file_flag=true;
 }
 

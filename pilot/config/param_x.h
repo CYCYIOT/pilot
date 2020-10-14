@@ -51,7 +51,7 @@
 #define INAV__FLOW__FUSE_VEL_NORMAL_DEF			2.50f
 #define INAV__FLOW__FUSE_BIAS_NORMAL_DEF		2.00f  //2.00f
 #define INAV__FLOW__FUSE_POS_ROTATE_DEF			1.00f
-#define INAV__FLOW__FUSE_VEL_ROTATE_DEF			3.00f
+#define INAV__FLOW__FUSE_VEL_ROTATE_DEF			100.00f // 3
 #define INAV__FLOW__FUSE_BIAS_ROTATE_DEF		5.00f
 #define INAV__FLOW__FUSE_POS_ACTION_DEF			1.00f 
 #define INAV__FLOW__FUSE_VEL_ACTION_DEF			4.00f
@@ -97,7 +97,7 @@
 #define INAV__BARO__VEL_CHECK_VAL_DEF			0.05f
 #define INAV__BARO__VEL_CHECK_TIMEOUT_DEF		0.5f
 
-#define CON__COMM__ATT_RP_LIMIT_DEF				20.00f
+#define CON__COMM__ATT_RP_LIMIT_DEF				5.00f
 #define CON__COMM__RATE_RP_LIMIT_DEF			1.50f
 #define CON__COMM__RATE_RP_STAB_LIMIT_DEF		0.20f
 #define CON__COMM__RATE_YAW_LIMIT_DEF			2.00f
@@ -111,7 +111,8 @@
 #define CON__COMM__RF_GAIN_DEF					1.0f
 #define CON__COMM__RF_VEL_CHECK_DEF				1.2f
 
-#define CON__TAKEOFF__SPIN_DEF					0.05f
+#define CON__TAKEOFF__SPIN_TIMEOUT              3.0f
+#define CON__TAKEOFF__SPIN_DEF					0.15f
 #define CON__TAKEOFF__ALT_DEF					1.0f
 #define CON__TAKEOFF__VEL_LIMIT_DEF				0.5f
 #define CON__TAKEOFF__RC_CHECK_DEF				0.3f
@@ -144,8 +145,8 @@
 #define ATT__RATE_RP_LOW_FILTER_DEF				50.0f
 #define ATT__RATE_YAW_LOW_FILTER_DEF			30.0f
 
-#define PID__ATT__ROLL_P_DEF 					0.30f  //0.15f
-#define PID__ATT__PITCH_P_DEF					0.30f  //0.15f
+#define PID__ATT__ROLL_P_DEF 					0.10f  //0.15f
+#define PID__ATT__PITCH_P_DEF					0.10f  //0.15f
 #define PID__ATT__YAW_P_DEF 					0.04f
 
 #define PID__RATE__ROLL_P_DEF					0.10f
@@ -191,7 +192,7 @@
 #define PID__VEL__X_I_INIT_DEF				0.0f
 #define PID__VEL__Y_I_INIT_DEF				0.0f
 
-#define PID__VEL__BREAK_XY_P_DEF			0.13f
+#define PID__VEL__BREAK_XY_P_DEF			0.40f
 #define PID__VEL__BREAK_XY_I_DEF			0.08f
 
 #define PID__VEL__Z_P_DEF         			0.3f

@@ -96,7 +96,7 @@
 #define INAV__BARO__VEL_CHECK_VAL_DEF			0.05f
 #define INAV__BARO__VEL_CHECK_TIMEOUT_DEF		0.5f
 
-#define CON__COMM__ATT_RP_LIMIT_DEF				20.00f
+#define CON__COMM__ATT_RP_LIMIT_DEF				10.00f//20.00f
 #define CON__COMM__RATE_RP_LIMIT_DEF			1.50f
 #define CON__COMM__RATE_RP_STAB_LIMIT_DEF		0.20f
 #define CON__COMM__RATE_YAW_LIMIT_DEF			2.00f
@@ -110,6 +110,7 @@
 #define CON__COMM__RF_GAIN_DEF					1.0f
 #define CON__COMM__RF_VEL_CHECK_DEF				1.2f
 
+#define CON__TAKEOFF__SPIN_TIMEOUT              1.0f
 #define CON__TAKEOFF__SPIN_DEF					0.05f
 #define CON__TAKEOFF__ALT_DEF					1.0f
 #define CON__TAKEOFF__VEL_LIMIT_DEF				0.5f
@@ -190,8 +191,8 @@
 #define PID__VEL__X_I_INIT_DEF				0.0f
 #define PID__VEL__Y_I_INIT_DEF				0.0f
 
-#define PID__VEL__BREAK_XY_P_DEF			0.13f
-#define PID__VEL__BREAK_XY_I_DEF			0.08f
+#define PID__VEL__BREAK_XY_P_DEF			0.30f//0.13f
+#define PID__VEL__BREAK_XY_I_DEF			0.10f//0.08f
 
 #define PID__VEL__Z_P_DEF         			0.3f
 #define PID__VEL__Z_I_DEF         			0.2f

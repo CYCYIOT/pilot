@@ -9,6 +9,10 @@
 #include "param_m.h"
 #elif X
 #include "param_x.h"
+#elif F
+#include "param_ft.h"
+#elif S
+#include "param_s500.h"
 #else
 #error "no arch"
 #endif
@@ -162,6 +166,7 @@
 #define CON__COMM__RF_GAIN_NAME					"CON__COMM__RF_GAIN"
 #define CON__COMM__RF_VEL_CHECK_NAME			"CON__COMM__RF_VEL_CHECK"
 
+#define CON__TAKEOFF__SPIN__TIMEOUT_NAME		"CON__TAKEOFF__SPIN_TIMEOUT"
 #define CON__TAKEOFF__SPIN_NAME					"CON__TAKEOFF__SPIN"
 #define CON__TAKEOFF__ALT_NAME					"CON__TAKEOFF__ALT"
 #define CON__TAKEOFF__VEL_LIMIT_NAME			"CON__TAKEOFF__VEL_LIMIT"

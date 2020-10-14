@@ -83,6 +83,8 @@ static bool  left_c    = false;
 static bool  back_c    = false;
 static bool  forward_c = false;
 static int   count_time = 0;
+static int   count_time_zero = 0;
+
 float get_aruco_thr()
 {
   return thr;
@@ -133,6 +135,7 @@ void ignore_core(float roll,float pitch)     //忽略特定二维码
 void timeout_set_zero()
 {
 	count_time=0;
+	count_time_zero=0;
 }
 
 void start_timeout()
@@ -140,9 +143,18 @@ void start_timeout()
  if(count_time++ > TIME_OUT){
 	awlink_aruco_send();
 	flag_aruco=0;
-	//printf("time out\n");
+	printf("time out\n");
 	}
 }
+void start_timeout_forzero()
+{
+ if(count_time_zero++ > TIME_OUT){
+	awlink_aruco_send();
+	flag_aruco=x_p=y_p=yaw_p=count_time_zero=0;
+	printf("time0 out\n");
+	}
+}
+
 void set_power(float roll,float pitch,float yaw,int id_aruco,int action)
 {
 
@@ -160,6 +172,9 @@ void set_power(float roll,float pitch,float yaw,int id_aruco,int action)
  aruco_id=id_aruco;
  flag_aruco=1;
  action_cmd=action;
+ if(action == 1){
+ debug_t("start yaw\n");
+ }
  timeout_set_zero();
 
 }
@@ -309,10 +324,10 @@ void process_action_def(float target_id)
 void process_action_yaw(float cal_yaw )
 {
  if(count0 > 3){
-     yaw_p=300;
+     yaw_p=-300;
 	}
  if(count1 > 3){
-     yaw_p=-300;
+     yaw_p=300;
     } 
 		
  if(cal_yaw > 170 || cal_yaw <-170 || cal_yaw == 0 || (cal_yaw > -5 && cal_yaw <5)){
@@ -320,6 +335,7 @@ void process_action_yaw(float cal_yaw )
 	  flag_aruco=0;
 	  count0=count1=0;
       awlink_aruco_send();
+	  debug_t("id_size = %d id = %.0f yaw = %.2f ok\n",aruco_data.id_size,aruco_data.id_data[0][0],aruco_data.id_data[0][3]);
 	}
  else if(cal_yaw > 5 ){	
   count0++;
@@ -328,6 +344,16 @@ void process_action_yaw(float cal_yaw )
   count1++;
  }
  
+}
+
+void process_1_code_yaw(float target_id)
+{
+ if(target_id == aruco_id){
+   process_action_yaw(aruco_data.id_data[0][3]);
+ }else{
+   start_timeout();
+ }
+
 }
 void process_action_center()
 {
@@ -340,7 +366,7 @@ void process_1_code()
 		process_action_def(aruco_data.id_data[0][0]);
 		break;
 	case ACTION_YAW:
-		process_action_yaw(aruco_data.id_data[0][3]);
+	    process_1_code_yaw(aruco_data.id_data[0][0]);
 		break;
 	case ACTION_CENTER:
 		process_action_center();
@@ -364,8 +390,9 @@ void process_def_code()
   	   case ACTION_DEF:
        process_action_def(aruco_data.id_data[i][0]);
 	   break;
-	   case ACTION_YAW:
-       process_action_yaw(aruco_data.id_data[i][3]);
+	   case ACTION_YAW:                               //没有目标id，不执行校准角度指令，直接超时处理
+      // process_action_yaw(aruco_data.id_data[i][3]);
+       start_timeout();
 	   break;
   	   }
    	}else{
@@ -391,11 +418,14 @@ int aruco_thread(void *arg)
 		return false;
 	 }
 
-  //printf("id_size = %d id = %f\n",aruco_data.id_size,aruco_data.id_data[0][0]);
+ // printf("id_size = %d id = %.0f yaw = %.2f\n",aruco_data.id_size,aruco_data.id_data[0][0],aruco_data.id_data[0][3]);
   if(flag_aruco == 1){                        //收到指令，启动数据处理                                  
+
+//	debug_t("id_size = %d id = %.0f yaw = %.2f\n",aruco_data.id_size,aruco_data.id_data[0][0],aruco_data.id_data[0][3]);
+
 	switch(aruco_data.id_size){                // 处理二维码个数
      case 0:                                   //识别不到超时处理
-	    start_timeout();
+	    start_timeout_forzero();
 	 	break;
 	 case 1:
 	 	process_1_code();
