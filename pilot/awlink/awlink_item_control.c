@@ -161,7 +161,7 @@ void awlink_decode_control_joystick(awlink_s * link,awlink_msg_s * msg_rev)
 	
 	data = (awlink_control_joystick_s *)msg_rev->data;
 	
-   // printf("roll=%d pitch=%d yaw=%d thr=%d\n",data->roll,data->pitch,data->yaw,data->throttle);
+ //   printf("roll=%d pitch=%d yaw=%d thr=%d\n",data->roll,data->pitch,data->yaw,data->throttle);
 	
 	if(link->control_enable == true){
          if(data->roll == 0 && data->pitch ==0 && data->yaw == 0 && data->throttle == 0){
@@ -222,9 +222,17 @@ void awlink_decode_control_mode(awlink_s * link,awlink_msg_s * msg_rev)
 {
 	awlink_control_mode_s * data;
 	data = (awlink_control_mode_s *)msg_rev->data;	
-    
-   if(data->mode == CONTROL_MODE_FLIP){  
+
+  //  printf("mode =%d\n",data->mode);
+ 
+   if(data->mode == CONTROL_MODE_FLIP || data->mode == CONTROL_MODE_RTH || data->mode == CONTROL_MODE_THROWN){  
 #ifdef S
+	 if(data->mode == CONTROL_MODE_FLIP){
+      control_steer_yaw(1);
+		}
+	 else{
+      control_steer_yaw(0);
+	 }
      return ;
 #elif X
       return ;

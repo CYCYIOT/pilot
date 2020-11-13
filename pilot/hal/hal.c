@@ -29,6 +29,7 @@
 #include "hal_aruco_linux.h"
 #include "hal_arduino.h"
 #include "hal_led.h"
+#include "hal_ppm.h"
 #define DEBUG_ID DEBUG_ID_HAL
 
 bool spl06_used			= false;
@@ -56,6 +57,8 @@ bool tof_vl53l1x_used   = false;
 bool infra_red_used     = false;
 bool aruco_used         = false;
 bool arduino_used       = false;
+bool led_used           = false;
+bool ppm_used           = false;
 int hal_init(void)
 {
     int ret = 0;
@@ -70,9 +73,10 @@ int hal_init(void)
 	mpu6050_used = mpu6050_open();
       
     //tof
-    tof_vl53l1x_used=tof_vl53l1x_open();
+    tof_vl53l1x_used = tof_vl53l1x_open();
     //infra_red
-   infra_red_used=infra_red_open();
+    infra_red_used = infra_red_open();
+	ppm_used = ppm_open();
 	//MOTOR
 	stm8s_used = stm8s_open();	
 
@@ -103,6 +107,8 @@ int hal_init(void)
 	batt_linux_used = batt_linux_open();
     //arduino
     arduino_used = arduino_open();
+	//led
+	led_used = led_open();
 	//CPU & MEMORY
 	cpu_linux_used = hal_linux_cpu_open();
 	mem_linux_used = hal_linux_mem_open();

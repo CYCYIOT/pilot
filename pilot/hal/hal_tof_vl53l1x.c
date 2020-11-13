@@ -170,7 +170,7 @@ bool tx_tof_data(float *dt, float *dist)
         
     *dist=(float)dis / 1000;
    // if(dis != 0) 
-  //  tof("dis = %d count_tof =%d\r\n",dis,count_tof++);
+ //  printf("dis = %f m \r\n",(float)dis / 1000);
     tof_yaw_data=*dist;
     return true;
     

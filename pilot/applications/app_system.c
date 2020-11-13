@@ -135,7 +135,7 @@ void system_param_init(void)
 {
 	param_set_var(FS__ATT_LIMIT_NAME		,&system_att_limit);      //60f
 	param_set_var(FS__IMU_TEMP_LIMIT_NAME	,&system_imu_temp_limit);  //80f
-	param_set_var(FS__LOW_BATT_NAME			,&system_batt_low);     //20f
+	param_set_var(FS__LOW_BATT_NAME			,&system_batt_low);     //10f
 }
 
 void system_init(void)

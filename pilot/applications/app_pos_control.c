@@ -65,9 +65,9 @@ void vel_control_xy_i_pop(int i,int mode)
 
 void pos_control_set_vel_pid_thrown_mode()
 {
-	pid_set_p(&vel_pid[0],pid_vel_xy_p*2.0f);
-	pid_set_p(&vel_pid[1],pid_vel_xy_p*2.0f);
-
+    pid_set_p(&vel_pid[0],pid_vel_xy_p*2.0f);
+    pid_set_p(&vel_pid[1],pid_vel_xy_p*2.0f);
+   
 	pid_set_i(&vel_pid[0],pid_vel_xy_i*2.0f);
 	pid_set_i(&vel_pid[1],pid_vel_xy_i*2.0f);
 }

@@ -31,6 +31,8 @@
 #include "awlink_encode.h"
 #include "awlink_item_control.h"
 #include "awlink_item_system.h"
+#include "hal_arduino.h"
+#include "hal_tof_vl53l1x.h"
 
 #define AWLINK_STATUS_USER_NAME_INFO_LEN 6
 
@@ -72,7 +74,8 @@ typedef struct PACKED {
 	float flow_y;
 	float flow_q;
 	float baro_alt;
-	float baro_pressure;
+	//float baro_pressure;
+	float tof_alt;
 	float baro_temp;
 }awlink_status_mp_info_s;
 
@@ -102,11 +105,11 @@ typedef struct PACKED {
 }awlink_status_user_info_s;
 
 typedef struct PACKED {
-	int data1;
-	int data2;
-	int data3;
-	int data4;
-	int data5;
+	float data1;
+	float data2;
+	float data3;
+	float data4;
+	float data5;
 }awlink_aruco_user_info_s;
 
 typedef struct PACKED {
@@ -366,7 +369,8 @@ void awlink_encode_status_mp_info(awlink_s * link)
 	data.flow_q = flow_get_quality();
 
 	data.baro_alt = baro_get_alt();
-	data.baro_pressure = baro_get_pres();
+	//data.baro_pressure = baro_get_pres();
+    data.tof_alt= get_tof_data_yaw();
 	data.baro_temp = baro_get_temp();
 	
 	msg.item_id = AWLINK_ITEM_STATUS;

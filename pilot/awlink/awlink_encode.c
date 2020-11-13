@@ -61,7 +61,7 @@ void awlink_encode(awlink_s * link,awlink_msg_s * msg,bool need_buf,bool safe)
 	}
 	buf[5+count] = msg->checksum & 0xFF;
 	buf[6+count] = (msg->checksum >> 8) & 0xFF;
-
+ 
 	awlink_encode_send(link,buf,msg->length + 7,need_buf,safe);
 }
 

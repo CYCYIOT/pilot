@@ -56,7 +56,7 @@ void control_thrown_param_init()
 {
 	param_set_var(CON__TAKEOFF__SPIN_NAME		,&takeoff_spin);
 	//param_set_var(CON__TAKEOFF__ALT_NAME		,&takeoff_alt);
-	takeoff_alt=0.5;
+	takeoff_alt=0.1;
 	param_set_var(CON__TAKEOFF__VEL_LIMIT_NAME	,&takeoff_vel_limit);
 	param_set_var(CON__TAKEOFF__RC_CHECK_NAME	,&takeoff_rc_check);
 }
@@ -67,7 +67,8 @@ void control_thrown_exit()
 	inav_flow_set_normal_mode();
 	att_control_set_att_pid_normal_mode();
 	pos_control_set_vel_pid_normal_mode();
-	flow_set_dtg(0.7f,2.0f);
+ //   flow_set_dtg(0.7f,2.0f);
+	flow_set_dtg(1.5f,2.0f);
 	failsafe_set_att_limit_enable(true);
 	INFO(DEBUG_ID,"thrown exit");
 }
@@ -75,6 +76,9 @@ void control_thrown_exit()
 void control_thrown_init(float param1,float param2)
 {
 	nav_s pos;
+
+	nav_reset();                    //test
+	attitude_reset();
 
 	nav_get_pos(&pos);
 	
@@ -84,7 +88,10 @@ void control_thrown_init(float param1,float param2)
 	
 	takeoff_step = TAKEOFF_STEP_SPIN;
 	takeoff_spin_time = 0.0f;
-	flow_set_dtg(0.2f,2.0f);
+//	flow_set_dtg(0.2f,2.0f);
+//  att_control_set_att_pid_thrown_mode();
+	flow_set_dtg(1.5f,2.0f);
+   
 	control_set_alt_start(nav_get_pos_ned_z());
 	failsafe_set_att_limit_enable(false);
 	INFO(DEBUG_ID,"thrown init");
@@ -105,7 +112,7 @@ void control_thrown_update(float dt,rc_s * rc)
 		float motor[MAX_NUM_MOTORS];
 
 		for(count = 0 ; count < MAX_NUM_MOTORS ;count++){
-			motor[count] = 0.15;
+			motor[count] = 0.3;
 		}
 		motor_set_test(false,0.01f,motor);
 		
@@ -114,6 +121,7 @@ void control_thrown_update(float dt,rc_s * rc)
 			//tkof_pos_sp[2] = takeoff_alt;
 			debug_t("== pos.pos_ned[2] = %f tkof_pos_sp[2] = %f att.roll = %f att.pitch = %f\n ",pos.pos_ned[2],tkof_pos_sp[2],att.att[0],att.att[1]);
 
+        //    inav_baro_set_takeoff_mode();
 			inav_baro_set_thrown_mode();
 			//inav_flow_set_takeoff_mode();
             inav_flow_set_thrown_mode();
@@ -125,6 +133,7 @@ void control_thrown_update(float dt,rc_s * rc)
 			//att_control_set_att_pid_normal_mode();
 			//pos_control_set_vel_pid_takeoff_mode();
 			pos_control_set_vel_pid_thrown_mode();
+		//	pos_control_set_vel_pid_takeoff_mode();
 			takeoff_step = TAKEOFF_STEP_NORMAL;
 			INFO(DEBUG_ID,"thrown now");
 		}

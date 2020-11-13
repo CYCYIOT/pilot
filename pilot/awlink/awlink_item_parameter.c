@@ -88,7 +88,7 @@ void awlink_decode_param_item(awlink_s * link,awlink_msg_s * msg_rev)
 	if(param_set(data->name,data->value) == true){
 		DEBUG(DEBUG_ID,"set param:(%s)(%5.5f) ok",data->name,data->value);
 	}else{
-		DEBUG(DEBUG_ID,"set param:(%s)(%5.5f) fail",data->name,data->value);
+		DEBUG(DEBUG_ID,"set param:(%s)(%5.5f) fail",data->name,data->value);	
 	}
 }
 
@@ -113,10 +113,10 @@ void awlink_handle_parameter(awlink_s * link,awlink_msg_s * msg)
 		case AWLINK_ITEM_PARAM_GET:
 			awlink_decode_param_get(link,msg);
 			break;
-		case AWLINK_ITEM_PARAM_ITEM:
+		case AWLINK_ITEM_PARAM_ITEM:	
 			awlink_decode_param_item(link,msg);
 			break;
-		case AWLINK_ITEM_PARAM_CONTROL:
+		case AWLINK_ITEM_PARAM_CONTROL:	
 			awlink_decode_param_control(link,msg);
 			break;
 	}

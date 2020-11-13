@@ -16,6 +16,7 @@
 #include "app_debug.h"
 #include "app_rc.h"
 #include "app_awlink.h"
+#include "hal_arduino.h"
 
 #define DEBUG_ID DEBUG_ID_HAL
 
@@ -97,7 +98,7 @@ void set_marking(uint8_t mark_shoot)
 {
   marking=mark_shoot;
 }
-void Parsing_returned_data(uint8_t ta, uint8_t id)
+static void parsing_bebit_data(uint8_t ta, uint8_t id)
 {
    if(id == marking && ta == 0x0d){
     awlink_shooting_send_tcp();   // 目前为udp
@@ -110,28 +111,46 @@ void arduino_update(float dt)
     int num;
 	uint8_t i;
 	uint8_t rx_buf[100];
-
-#ifdef X_1
+   
+#ifdef S
 	rc_awlink_set_rc_h();                      //主动刷新心跳，无断线自动降落功能
 #endif  
-
+  
 	num = read(arduino_fd,rx_buf,100);
 	if(num > 0){
+   // printf("num = %d\n",num);
 		for(i = 0;i < num;i++){
-			printf("rx_buf[%d] = %d %x \n",i,rx_buf[i],rx_buf[i]);
+		//	printf("rx_buf[%d] = %d %x \n",i,rx_buf[i],rx_buf[i]);
 		}
-       Parsing_returned_data(rx_buf[0],rx_buf[3]);
+
+	switch(rx_buf[0]){
+     case UART_CONTROL__GET_SHOOTING:
+       parsing_bebit_data(rx_buf[0],rx_buf[3]);
+	   break;
 #if 0
 	   if(arduino_control(rx_buf[0]) == true ){     //先判断是不是自定义私有协议
          return ;
 	   }
 #endif
-	   if(rx_buf[0] == AWLINK_MAGIC){
-		 crc_check(rx_buf,num);
-		 }else{
+     case UART_CONTROL_GET_JOYSTICK:
+	// if(rx_buf[0] == AWLINK_MAGIC){
+
+         if(num > 6){
+	     crc_check(rx_buf,num);
+         	}
+	//}else{
         // DEBUG(DEBUG_ID,"uart send error\n");
-		 crc_check(&rx_buf[8],num-8);          //串口数据会多发8位，当接受的第一位数据不是0xFA时，需要后移8位才是需要的数据
-	    }
+	//crc_check(&rx_buf[8],num-8);          //串口数据会多发8位，当接受的第一位数据不是0xFA时，需要后移8位才是需要的数据
+	//  }
+	   break;
+	case UART_CONTROL_GET_ULTRASONIC:
+		parsing_ultrasonic_data(rx_buf,num);
+		break;
+	case UART_CONTROL_GET_GPS:
+		printf("gps update\n");
+		parsing_gps_data(rx_buf,num);
+		break;
+     }
 	}
 
 }

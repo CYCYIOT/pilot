@@ -315,7 +315,7 @@ void control_poshold_status_init(nav_s pos)
 			case STATUS_ROTATE:
 				nav_backup_acc_bias();
 				inav_flow_set_rotate_mode();
-			//   pos_control_set_vel_pid_rotate_mode();
+			  // pos_control_set_vel_pid_rotate_mode();
 				break;
 			default:
 				break;

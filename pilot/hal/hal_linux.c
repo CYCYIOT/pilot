@@ -223,7 +223,7 @@ void hal_linux_uart_cfg(int fd, int speed)
     options.c_iflag &= ~IXON;
     options.c_iflag &= ~ICRNL;
 	
-    cfsetspeed(&options, speed);             //add
+    cfsetospeed(&options, speed);             //add
 
     tcflush(fd, TCIFLUSH);
     tcsetattr(fd, TCSANOW, &options);

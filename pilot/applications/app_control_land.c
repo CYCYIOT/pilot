@@ -134,11 +134,11 @@ void control_land_update(float dt,rc_s * rc)
 
 	control_yaw_common_rc(dt,rc);
 	control_alt_vel_common(dt,land_vel_target,land_vel_target);
-
-	if(fabs(rc->thr_raw) > 0){
-		control_set_normal_mode();
+#if 0
+	if(fabs(rc->thr_raw) > 0){      //²âÊÔÉÏÏÂÒÆ¶¯£¬½µÂäÖ¸Áî²»ÏìÓ¦
+	//	control_set_normal_mode();
 	}
-	
+#endif	
 	if(control_land_update_land_check(dt) == true){
 		INFO(DEBUG_ID,"land done"); 
 		control_set_mode(CONTROL_MODE_STOP,0,0);
